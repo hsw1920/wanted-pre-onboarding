@@ -134,8 +134,6 @@ func addSubject(){
         return
     }
     
-    
-    
     for student in studentList {
         if student.name == studentName {
             student.subjects[subject] = subjectScore
@@ -145,6 +143,78 @@ func addSubject(){
         }
     }
 
+}
+
+
+func deleteSubject() {
+    print("성적을 삭제할 학생의 이름, 과목 이름을 띄어쓰길 구분하여 차례로 작성해주세요.")
+    print("입력예) Mickey Swift")
+    
+    let input = readLine()!
+    
+    let studentName: String
+    let subject: String
+    
+    
+    // 먼저 input으로 들어온 문자열을 공백을 기준으로 나누어서 name subject score로 저장함
+    let splitInput = input.split(separator: " ")
+    
+    // 잘못입력하는 경우?
+    // 1. 2가지가 아닌경우
+    // 2. 학생이 이름이 없는경우
+    
+    // 공백기준 2가지 입력이 아닌경우
+    if splitInput.count != 2 {
+        print("입력이 잘못되었습니다. 다시 확인해주세요.")
+        return
+    } else {
+        studentName = String(splitInput[0])
+        subject = String(splitInput[1])
+    }
+    
+    // 학생이름 존재하는지 확인
+    let hasStudent = studentList.contains { student -> Bool in
+        if student.name == studentName {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    // 학생이름 없으면 리턴
+    if !hasStudent {
+        print("\(studentName) 학생을 찾지 못했습니다.")
+        return
+    }
+    
+    // 해당학생을 list에서 구함
+    for student in studentList {
+        
+        // 해당 학생이면
+        if student.name == studentName {
+            
+            // 해당 학생에게 해당 과목이 존재하는지 여부 확인
+            let hasSubject = student.subjects.contains { (key: String, value: String) -> Bool in
+                if key == subject {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            
+            // 해당 과목이 존재하지 않으면
+            if !hasSubject {
+                print("\(studentName) 학생의 \(subject) 과목의 성적이 존재하지 않습니다.")
+                return
+            } else { // 해당 과목이 존재하면
+                student.subjects.removeValue(forKey: subject)
+                print("\(studentName) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
+                print(student.subjects)
+                return
+            }
+ 
+        }
+    }
     
 }
 
@@ -159,7 +229,7 @@ func startFunc(_ cases: String){
     case "3" : // 성적추가(변경)
         addSubject()
     case "4" : // 성적삭제
-        print("4")
+        deleteSubject()
     case "5" : // 평점보기
         print("5 asdasd")
     case "X" : // 종료
