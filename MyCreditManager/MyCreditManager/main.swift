@@ -19,6 +19,7 @@ class Students {
 var studentList: [Students] = []
 var quit : Bool = false
 
+// MARK: - 학생 추가
 func addStudent(){
     print("추가할 학생의 이름을 입력해주세요")
 
@@ -56,13 +57,36 @@ func addStudent(){
     print("\(input) 학생을 추가했습니다.")
 }
 
+// MARK: - 학생 삭제
+func deleteStudent(){
+    print("삭제할 학생의 이름을 입력해주세요")
+
+    let input = readLine()!
+    var check: Bool = false
+    
+    var idx = 0
+    for student in studentList {
+        if student.name == input {
+            print("\(input) 학생을 삭제하였습니다.")
+            studentList.remove(at: idx)
+            check = true
+        }
+        idx+=1
+    }
+    
+    if !check {
+        print("\(input) 학생을 찾지 못했습니다.")
+    }
+    
+}
+
 func startFunc(_ cases: String){
     
     switch cases{
     case "1" : // 학생 추가
         addStudent()
     case "2" : // 학생 삭제
-        print("2")
+        deleteStudent()
     case "3" : // 성적추가(변경)
         print("3")
     case "4" : // 성적삭제
