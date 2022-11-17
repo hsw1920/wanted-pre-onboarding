@@ -145,7 +145,7 @@ func addSubject(){
 
 }
 
-
+// MARK: - 성적삭제
 func deleteSubject() {
     print("성적을 삭제할 학생의 이름, 과목 이름을 띄어쓰길 구분하여 차례로 작성해주세요.")
     print("입력예) Mickey Swift")
@@ -218,6 +218,65 @@ func deleteSubject() {
     
 }
 
+// MARK: - 평점보기
+func showGrade() {
+    print("평점을 알고싶은 학생의 이름을 입력해주세요")
+    
+    let input = readLine()!
+    
+    let studentName: String
+    
+    
+    // 잘못입력하는 경우?
+    // 1. 공백만 친경우
+    // 2. 학생이 이름이 없는경우
+    
+    // 잘못된 입력 들어오면 처리
+    // 잘못된 입력케이스 -> "" 아무런 입력이 없는경우
+    if input == "" {
+        print("입력이 잘못되었습니다. 다시 확인해주세요")
+        return
+    } else {
+        studentName = input
+    }
+    
+    
+    // 학생이름 존재하는지 확인
+    let hasStudent = studentList.contains { student -> Bool in
+        if student.name == studentName {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    // 학생이름 없으면 리턴
+    if !hasStudent {
+        print("\(studentName) 학생을 찾지 못했습니다.")
+        return
+    }
+    
+    // 해당학생을 list에서 구함
+    for student in studentList {
+        
+        // 해당 학생이면
+        if student.name == studentName {
+            
+            var score: Double = 0
+            let subjectCount = student.subjects.count
+            let scoreToDouble : [String:Double] = ["A+":4.5, "A":4.0, "B+":3.5, "B":3.0, "C+":2.5, "C":2.0, "D+":1.5,"D":1.0,"F":0]
+            
+            for subject in student.subjects {
+                print("\(subject.key): \(subject.value)")
+                score += scoreToDouble[subject.value]!
+            }
+
+            print("평점 : \(String(format: "%.2f", score/Double(subjectCount)))")
+            return
+        }
+    }
+    
+}
 
 func startFunc(_ cases: String){
     
@@ -231,9 +290,8 @@ func startFunc(_ cases: String){
     case "4" : // 성적삭제
         deleteSubject()
     case "5" : // 평점보기
-        print("5 asdasd")
+        showGrade()
     case "X" : // 종료
-        print("X")
         quit = true
     default:
         print("절대 없음")
