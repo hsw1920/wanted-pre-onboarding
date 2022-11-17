@@ -278,6 +278,8 @@ func showGrade() {
     
 }
 
+
+// MARK: - input Cases
 func startFunc(_ cases: String){
     
     switch cases{
@@ -294,7 +296,7 @@ func startFunc(_ cases: String){
     case "X" : // 종료
         quit = true
     default:
-        print("절대 없음")
+        print("뭔가 입력이 잘못되었습니다. 1~5 사이의 숫자 혹은 X를 입력해주세요.")
     }
 }
 
@@ -305,22 +307,10 @@ while(true){
     print("1: 학생추가, 2: 학생삭제, 3: 성적추가(변경), 4: 성적삭제, 5:평점보기, X: 종료")
     let inputs = readLine()!
     
-    // 숫자일때 X일때 나눠서처리
-    var isTrue = false
+    startFunc(inputs)
     
-    ["1","2","3","4","5","X"].map {
-        if inputs == String($0) {
-            isTrue = true
-            // case에 맞는 함수 실행
-            startFunc(inputs)
-        }
-    }
-    
-    if !isTrue {
-        print("뭔가 입력이 잘못되었습니다. 1~5 사이의 숫자 혹은 X를 입력해주세요.")
-    }
     if quit {
-        print("종료합니다")
+        print("프로그램을 종료합니다...")
         break
     }
 }
