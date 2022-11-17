@@ -26,7 +26,6 @@ func addStudent(){
     print("추가할 학생의 이름을 입력해주세요")
 
     let input = readLine()!
-    var check: Bool = false
     
     // 잘못된 입력 들어오면 처리
     // 잘못된 입력케이스 -> "" 아무런 입력이 없는경우
@@ -60,17 +59,6 @@ func deleteStudent(){
     print("삭제할 학생의 이름을 입력해주세요")
 
     let input = readLine()!
-    var check: Bool = false
-    
-    var idx = 0
-//    for student in studentList {
-//        if student.name == input {
-//            print("\(input) 학생을 삭제하였습니다.")
-//            studentList.remove(at: idx)
-//            check = true
-//        }
-//        idx+=1
-//    }
     
     // studentList에서 해당 학생이 존재하는지 여부
     let hasStudentName = studentList.contains { (key: String, value: Students) in
@@ -88,11 +76,7 @@ func deleteStudent(){
     } else {
         print("\(input) 학생을 찾지 못했습니다.")
     }
-//
-//    if !check {
-//        print("\(input) 학생을 찾지 못했습니다.")
-//    }
-    
+
 }
 
 // MARK: - 성적추가
@@ -102,7 +86,6 @@ func addSubject(){
     print("만약에 학생의 성적 중 해당 과목이 존재하면 기존 점수가 갱신됩니다.")
     
     let input = readLine()!
-    
     let studentName: String
     let subject: String
     let subjectScore: String
@@ -124,14 +107,6 @@ func addSubject(){
         subjectScore = String(splitInput[2])
     }
     
-//    // 학생이름 존재하는지 확인
-//    let hasStudent = studentList.contains { student -> Bool in
-//        if student.name == studentName {
-//            return true
-//        } else {
-//            return false
-//        }
-//    }
     // studentList에서 해당 학생이 존재하는지 여부
     let hasStudentName = studentList.contains { (key: String, value: Students) in
         if key == studentName {
@@ -141,11 +116,6 @@ func addSubject(){
         }
     }
     
-//    // 학생이름 없으면 리턴
-//    if !hasStudent {
-//        print("\(studentName) 학생을 찾지 못했습니다.")
-//        return
-//    }
     // 학생이름 없으면 리턴
     if !hasStudentName {
         print("\(studentName) 학생을 찾지 못했습니다.")
@@ -160,14 +130,6 @@ func addSubject(){
         return
     }
     
-//    for student in studentList {
-//        if student.name == studentName {
-//            student.subjects[subject] = subjectScore
-//            print("\(studentName) 학생의 \(subject) 과목이 \(subjectScore)로 추가(변경)되었습니다.")
-//            print(student.subjects)
-//            return
-//        }
-//    }
     studentList[studentName]?.subjects[subject] = subjectScore
     print("\(studentName) 학생의 \(subject) 과목이 \(subjectScore)로 추가(변경)되었습니다.")
     print("\(studentList[studentName]!.subjects)")
@@ -179,10 +141,8 @@ func deleteSubject() {
     print("입력예) Mickey Swift")
     
     let input = readLine()!
-    
     let studentName: String
     let subject: String
-    
     
     // 먼저 input으로 들어온 문자열을 공백을 기준으로 나누어서 name subject score로 저장함
     let splitInput = input.split(separator: " ")
@@ -200,14 +160,6 @@ func deleteSubject() {
         subject = String(splitInput[1])
     }
     
-//    // 학생이름 존재하는지 확인
-//    let hasStudent = studentList.contains { student -> Bool in
-//        if student.name == studentName {
-//            return true
-//        } else {
-//            return false
-//        }
-//    }
     // studentList에서 해당 학생이 존재하는지 여부
     let hasStudentName = studentList.contains { (key: String, value: Students) in
         if key == studentName {
@@ -216,12 +168,7 @@ func deleteSubject() {
             return false
         }
     }
-    
-//    // 학생이름 없으면 리턴
-//    if !hasStudent {
-//        print("\(studentName) 학생을 찾지 못했습니다.")
-//        return
-//    }
+
     // 학생이름 없으면 리턴
     if !hasStudentName {
         print("\(studentName) 학생을 찾지 못했습니다.")
@@ -243,42 +190,10 @@ func deleteSubject() {
         return
     } else { // 해당 과목이 존재하면
         studentList[studentName]?.subjects.removeValue(forKey: subject)
-        //student.subjects.removeValue(forKey: subject)
         print("\(studentName) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
-        //print(student.subjects)
         print(studentList[studentName]!.subjects)
         return
     }
-    
-    
-//    // 해당학생을 list에서 구함
-//    for student in studentList {
-//
-//        // 해당 학생이면
-//        if student.name == studentName {
-//
-//            // 해당 학생에게 해당 과목이 존재하는지 여부 확인
-//            let hasSubject = student.subjects.contains { (key: String, value: String) -> Bool in
-//                if key == subject {
-//                    return true
-//                } else {
-//                    return false
-//                }
-//            }
-//
-//            // 해당 과목이 존재하지 않으면
-//            if !hasSubject {
-//                print("\(studentName) 학생의 \(subject) 과목의 성적이 존재하지 않습니다.")
-//                return
-//            } else { // 해당 과목이 존재하면
-//                student.subjects.removeValue(forKey: subject)
-//                print("\(studentName) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
-//                print(student.subjects)
-//                return
-//            }
-//
-//        }
-//    }
     
 }
 
@@ -289,7 +204,6 @@ func showGrade() {
     let input = readLine()!
     
     let studentName: String
-    
     
     // 잘못입력하는 경우?
     // 1. 공백만 친경우
@@ -304,15 +218,6 @@ func showGrade() {
         studentName = input
     }
     
-    
-    // 학생이름 존재하는지 확인
-//    let hasStudent = studentList.contains { student -> Bool in
-//        if student.name == studentName {
-//            return true
-//        } else {
-//            return false
-//        }
-//    }
     // studentList에서 해당 학생이 존재하는지 여부
     let hasStudentName = studentList.contains { (key: String, value: Students) in
         if key == studentName {
@@ -336,30 +241,10 @@ func showGrade() {
         print("\(subject.key): \(subject.value)")
         score += scoreToDouble[subject.value]!
     }
+    
     print("평점 : \(String(format: "%.2f", score/Double(subjectCount)))")
     
-//    // 해당학생을 list에서 구함
-//    for student in studentList {
-//
-//        // 해당 학생이면
-//        if student.name == studentName {
-//
-//            var score: Double = 0
-//            let subjectCount = student.subjects.count
-//            let scoreToDouble : [String:Double] = ["A+":4.5, "A":4.0, "B+":3.5, "B":3.0, "C+":2.5, "C":2.0, "D+":1.5,"D":1.0,"F":0]
-//
-//            for subject in student.subjects {
-//                print("\(subject.key): \(subject.value)")
-//                score += scoreToDouble[subject.value]!
-//            }
-//
-//            print("평점 : \(String(format: "%.2f", score/Double(subjectCount)))")
-//            return
-//        }
-//    }
-    
 }
-
 
 // MARK: - input Cases
 func startFunc(_ cases: String){
@@ -382,8 +267,6 @@ func startFunc(_ cases: String){
     }
 }
 
-
-
 while(true){
     print("원하는 기능을 입력해주세요")
     print("1: 학생추가, 2: 학생삭제, 3: 성적추가(변경), 4: 성적삭제, 5:평점보기, X: 종료")
@@ -396,6 +279,4 @@ while(true){
         break
     }
 }
-
-
 
