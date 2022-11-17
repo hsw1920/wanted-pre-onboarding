@@ -18,7 +18,7 @@ class Students {
 }
 
 // 학생 class 리스트
-var studentList: [Students] = []
+var studentList: [String:Students] = [:]
 var quit : Bool = false
 
 // MARK: - 학생 추가
@@ -35,27 +35,23 @@ func addStudent(){
         return
     }
     
-    // 입력 잘못되면 return
-    studentList.map { student in
-        if student.name == input {
-            print("\(input)은 이미 존재하는 학생입니다. 추가하지 않습니다.")
-            check = true
+    // studentList에서 해당 학생이 존재하는지 여부
+    let hasStudentName = studentList.contains { (key: String, value: Students) in
+        if key == input {
+            return true
+        } else {
+            return false
         }
     }
-
-    if check {
-        print("---------------------")
-        print("현재 studentList 는")
-        print("---------------------")
-        studentList.map { student in
-            print(student.name)
-        }
-        print("---------------------")
+    
+    // 학생이 이미 존재하면 추가하지 않고 리턴
+    if hasStudentName {
+        print("\(input)은 이미 존재하는 학생입니다. 추가하지 않습니다.")
         return
     }
     
-    // 입력 올바르면 list에 추가
-    studentList.append(Students(name: input))
+    // 입력 올바르면 dictionary에 추가
+    studentList[input] = Students(name: input)
     print("\(input) 학생을 추가했습니다.")
 }
 
@@ -67,18 +63,35 @@ func deleteStudent(){
     var check: Bool = false
     
     var idx = 0
-    for student in studentList {
-        if student.name == input {
-            print("\(input) 학생을 삭제하였습니다.")
-            studentList.remove(at: idx)
-            check = true
+//    for student in studentList {
+//        if student.name == input {
+//            print("\(input) 학생을 삭제하였습니다.")
+//            studentList.remove(at: idx)
+//            check = true
+//        }
+//        idx+=1
+//    }
+    
+    // studentList에서 해당 학생이 존재하는지 여부
+    let hasStudentName = studentList.contains { (key: String, value: Students) in
+        if key == input {
+            return true
+        } else {
+            return false
         }
-        idx+=1
     }
     
-    if !check {
+    // 존재하면 삭제
+    if hasStudentName {
+        studentList.removeValue(forKey: input)
+        print("\(input) 학생을 삭제하였습니다.")
+    } else {
         print("\(input) 학생을 찾지 못했습니다.")
     }
+//
+//    if !check {
+//        print("\(input) 학생을 찾지 못했습니다.")
+//    }
     
 }
 
@@ -111,17 +124,30 @@ func addSubject(){
         subjectScore = String(splitInput[2])
     }
     
-    // 학생이름 존재하는지 확인
-    let hasStudent = studentList.contains { student -> Bool in
-        if student.name == studentName {
+//    // 학생이름 존재하는지 확인
+//    let hasStudent = studentList.contains { student -> Bool in
+//        if student.name == studentName {
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
+    // studentList에서 해당 학생이 존재하는지 여부
+    let hasStudentName = studentList.contains { (key: String, value: Students) in
+        if key == studentName {
             return true
         } else {
             return false
         }
     }
     
+//    // 학생이름 없으면 리턴
+//    if !hasStudent {
+//        print("\(studentName) 학생을 찾지 못했습니다.")
+//        return
+//    }
     // 학생이름 없으면 리턴
-    if !hasStudent {
+    if !hasStudentName {
         print("\(studentName) 학생을 찾지 못했습니다.")
         return
     }
@@ -134,15 +160,17 @@ func addSubject(){
         return
     }
     
-    for student in studentList {
-        if student.name == studentName {
-            student.subjects[subject] = subjectScore
-            print("\(studentName) 학생의 \(subject) 과목이 \(subjectScore)로 추가(변경)되었습니다.")
-            print(student.subjects)
-            return
-        }
-    }
-
+//    for student in studentList {
+//        if student.name == studentName {
+//            student.subjects[subject] = subjectScore
+//            print("\(studentName) 학생의 \(subject) 과목이 \(subjectScore)로 추가(변경)되었습니다.")
+//            print(student.subjects)
+//            return
+//        }
+//    }
+    studentList[studentName]?.subjects[subject] = subjectScore
+    print("\(studentName) 학생의 \(subject) 과목이 \(subjectScore)로 추가(변경)되었습니다.")
+    print("\(studentList[studentName]!.subjects)")
 }
 
 // MARK: - 성적삭제
@@ -172,49 +200,85 @@ func deleteSubject() {
         subject = String(splitInput[1])
     }
     
-    // 학생이름 존재하는지 확인
-    let hasStudent = studentList.contains { student -> Bool in
-        if student.name == studentName {
+//    // 학생이름 존재하는지 확인
+//    let hasStudent = studentList.contains { student -> Bool in
+//        if student.name == studentName {
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
+    // studentList에서 해당 학생이 존재하는지 여부
+    let hasStudentName = studentList.contains { (key: String, value: Students) in
+        if key == studentName {
             return true
         } else {
             return false
         }
     }
     
+//    // 학생이름 없으면 리턴
+//    if !hasStudent {
+//        print("\(studentName) 학생을 찾지 못했습니다.")
+//        return
+//    }
     // 학생이름 없으면 리턴
-    if !hasStudent {
+    if !hasStudentName {
         print("\(studentName) 학생을 찾지 못했습니다.")
         return
     }
     
-    // 해당학생을 list에서 구함
-    for student in studentList {
-        
-        // 해당 학생이면
-        if student.name == studentName {
-            
-            // 해당 학생에게 해당 과목이 존재하는지 여부 확인
-            let hasSubject = student.subjects.contains { (key: String, value: String) -> Bool in
-                if key == subject {
-                    return true
-                } else {
-                    return false
-                }
-            }
-            
-            // 해당 과목이 존재하지 않으면
-            if !hasSubject {
-                print("\(studentName) 학생의 \(subject) 과목의 성적이 존재하지 않습니다.")
-                return
-            } else { // 해당 과목이 존재하면
-                student.subjects.removeValue(forKey: subject)
-                print("\(studentName) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
-                print(student.subjects)
-                return
-            }
- 
+    // 해당학생에게 해당과목이 있는지 여부 확인
+    let hasSubject = studentList[studentName]!.subjects.contains(where: { (key: String, value: String) in
+        if key == subject {
+            return true
+        } else {
+            return false
         }
+    })
+    
+    // 해당 과목이 존재하지 않으면
+    if !hasSubject {
+        print("\(studentName) 학생의 \(subject) 과목의 성적이 존재하지 않습니다.")
+        return
+    } else { // 해당 과목이 존재하면
+        studentList[studentName]?.subjects.removeValue(forKey: subject)
+        //student.subjects.removeValue(forKey: subject)
+        print("\(studentName) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
+        //print(student.subjects)
+        print(studentList[studentName]!.subjects)
+        return
     }
+    
+    
+//    // 해당학생을 list에서 구함
+//    for student in studentList {
+//
+//        // 해당 학생이면
+//        if student.name == studentName {
+//
+//            // 해당 학생에게 해당 과목이 존재하는지 여부 확인
+//            let hasSubject = student.subjects.contains { (key: String, value: String) -> Bool in
+//                if key == subject {
+//                    return true
+//                } else {
+//                    return false
+//                }
+//            }
+//
+//            // 해당 과목이 존재하지 않으면
+//            if !hasSubject {
+//                print("\(studentName) 학생의 \(subject) 과목의 성적이 존재하지 않습니다.")
+//                return
+//            } else { // 해당 과목이 존재하면
+//                student.subjects.removeValue(forKey: subject)
+//                print("\(studentName) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
+//                print(student.subjects)
+//                return
+//            }
+//
+//        }
+//    }
     
 }
 
@@ -242,8 +306,16 @@ func showGrade() {
     
     
     // 학생이름 존재하는지 확인
-    let hasStudent = studentList.contains { student -> Bool in
-        if student.name == studentName {
+//    let hasStudent = studentList.contains { student -> Bool in
+//        if student.name == studentName {
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
+    // studentList에서 해당 학생이 존재하는지 여부
+    let hasStudentName = studentList.contains { (key: String, value: Students) in
+        if key == studentName {
             return true
         } else {
             return false
@@ -251,30 +323,40 @@ func showGrade() {
     }
     
     // 학생이름 없으면 리턴
-    if !hasStudent {
+    if !hasStudentName {
         print("\(studentName) 학생을 찾지 못했습니다.")
         return
     }
     
-    // 해당학생을 list에서 구함
-    for student in studentList {
-        
-        // 해당 학생이면
-        if student.name == studentName {
-            
-            var score: Double = 0
-            let subjectCount = student.subjects.count
-            let scoreToDouble : [String:Double] = ["A+":4.5, "A":4.0, "B+":3.5, "B":3.0, "C+":2.5, "C":2.0, "D+":1.5,"D":1.0,"F":0]
-            
-            for subject in student.subjects {
-                print("\(subject.key): \(subject.value)")
-                score += scoreToDouble[subject.value]!
-            }
-
-            print("평점 : \(String(format: "%.2f", score/Double(subjectCount)))")
-            return
-        }
+    var score: Double = 0
+    let subjectCount = studentList[studentName]!.subjects.count
+    let scoreToDouble : [String:Double] = ["A+":4.5, "A":4.0, "B+":3.5, "B":3.0, "C+":2.5, "C":2.0, "D+":1.5,"D":1.0,"F":0]
+    
+    for subject in studentList[studentName]!.subjects {
+        print("\(subject.key): \(subject.value)")
+        score += scoreToDouble[subject.value]!
     }
+    print("평점 : \(String(format: "%.2f", score/Double(subjectCount)))")
+    
+//    // 해당학생을 list에서 구함
+//    for student in studentList {
+//
+//        // 해당 학생이면
+//        if student.name == studentName {
+//
+//            var score: Double = 0
+//            let subjectCount = student.subjects.count
+//            let scoreToDouble : [String:Double] = ["A+":4.5, "A":4.0, "B+":3.5, "B":3.0, "C+":2.5, "C":2.0, "D+":1.5,"D":1.0,"F":0]
+//
+//            for subject in student.subjects {
+//                print("\(subject.key): \(subject.value)")
+//                score += scoreToDouble[subject.value]!
+//            }
+//
+//            print("평점 : \(String(format: "%.2f", score/Double(subjectCount)))")
+//            return
+//        }
+//    }
     
 }
 
